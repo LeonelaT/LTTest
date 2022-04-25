@@ -1,0 +1,256 @@
+{
+	"info": {
+		"_postman_id": "8db9ddc9-1eee-4e20-85cb-fc1654f10195",
+		"name": "Show me the money!",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get User Portfolio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Testing Performance",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"//If I had the chance with this API, I would test if the User Portfolio in the response corresponds to the Logged User. ",
+							"",
+							"// Testing if the Response has all properties: should contain savings and an array of investments objects,",
+							"pm.test(\"The response has all properties\", () => {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.savings).to.be.a('number');",
+							"    pm.expect(responseJson.investments).to.be.a('array');",
+							"});",
+							"//Test if the Array of Investment has all properties.",
+							"pm.test(\"Investment Array contains all properties.\",() => {",
+							"  pm.expect(pm.response.text()).to.include(\"_id\");",
+							"  pm.expect(pm.response.text()).to.include(\"amountSubscribed\");",
+							"  pm.expect(pm.response.text()).to.include(\"name\");",
+							"  pm.expect(pm.response.text()).to.include(\"type\");",
+							"  pm.expect(pm.response.text()).to.include(\"currentValue\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://glacial-reef-23457.herokuapp.com/api/user-portfolio",
+					"protocol": "https",
+					"host": [
+						"glacial-reef-23457",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"user-portfolio"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Available Investments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"//Test if the Array of Investment has all properties.",
+							"pm.test(\"Investment Object Array contains all properties.\",() => {",
+							"  pm.expect(pm.response.text()).to.include(\"_id\");",
+							"  pm.expect(pm.response.text()).to.include(\"name\");",
+							"  pm.expect(pm.response.text()).to.include(\"type\");",
+							"  pm.expect(pm.response.text()).to.include(\"currentValue\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://glacial-reef-23457.herokuapp.com/api/available-investments",
+					"protocol": "https",
+					"host": [
+						"glacial-reef-23457",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"available-investments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buy a Stock/Bond",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Testing performance.",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"// Testing if the request was correctly processed. ",
+							"pm.test(\"Correct Request - 200 Ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Testing if the amount input is valid and the operation could be executed. ",
+							"",
+							"// Amount with valid input [Integer/Float] (although in the Test Cases I said it was a requirement (fake) to only accept Integers)",
+							"pm.test(\"Operation was successful.\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"done\");",
+							"});",
+							"// Amount with 0 as value.",
+							"pm.test(\"Operation could not be processed due to missing quantity values.\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Missing amount POST param.\");",
+							"});",
+							"// Amount with invalid input [character]",
+							"pm.test(\"Operation could not be processed due to invalid quantity values.\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"amount POST param should be a number.\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"itemId\":\"a3\",\n    \"amount\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://glacial-reef-23457.herokuapp.com/api/buy",
+					"protocol": "https",
+					"host": [
+						"glacial-reef-23457",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"buy"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sell a Stock/Bond",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Testing performance.",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"// Testing if the request was correctly processed. ",
+							"pm.test(\"Correct Request - 200 Ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Testing if the amount input is valid and the operation could be executed. ",
+							"",
+							"// Amount with valid input [Integer/Float] (although in the Test Cases I said it was a requirement (fake) to only accept Integers)",
+							"pm.test(\"Operation was successful.\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"done\");",
+							"});",
+							"// Amount with 0 as value.",
+							"pm.test(\"Operation could not be processed due to missing quantity values.\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Missing amount POST param.\");",
+							"});",
+							"// Amount with invalid input [character]",
+							"pm.test(\"Operation could not be processed due to invalid quantity values.\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"amount POST param should be a number.\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"itemId\":\"a1\",\n    \"amount\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://glacial-reef-23457.herokuapp.com/api/sell",
+					"protocol": "https",
+					"host": [
+						"glacial-reef-23457",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"sell"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
